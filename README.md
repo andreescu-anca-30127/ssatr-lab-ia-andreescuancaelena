@@ -1,2 +1,4 @@
-# ssatr-lab-ia-andreescuancaelena
-Repository pentru laboratorul SSATR - 2025
+# Laborator SSATR - Andreescu Anca Elena
+
+## Despre
+Repository pentru lucrarile de laborator din cadrul cursului Structuri Software pentru Aplicații de Timp Real.
