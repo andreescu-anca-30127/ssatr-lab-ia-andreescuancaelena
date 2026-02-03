@@ -1,0 +1,63 @@
+/* Tab bar container */
+.tabs {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  padding: 10px;
+  margin: 0;
+
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Each tab */
+.tabs a {
+  flex: 1;
+  text-align: center;
+
+  padding: 10px 12px;
+  border-radius: 12px;
+
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+
+  color: rgba(0, 0, 0, 0.65);
+  background: rgba(0, 0, 0, 0.04);
+
+  transition: transform 120ms ease, background 120ms ease, color 120ms ease;
+}
+
+/* Hover */
+.tabs a:hover {
+  transform: translateY(-1px);
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* Active tab (routerLinkActive="active") */
+.tabs a.active {
+  color: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.12);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Mobile look: tabs as pill bar */
+@media (max-width: 480px) {
+  .tabs {
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .tabs a {
+    padding: 10px 8px;
+    font-size: 13px;
+    border-radius: 14px;
+  }
+}

@@ -1,0 +1,80 @@
+<div class="page">
+  <div class="hero">
+    <div class="badge">Participant</div>
+    <h1>Send quick feedback</h1>
+    <p>Rate the session and optionally leave comments. Anonymous submission is available.</p>
+  </div>
+
+  <section class="card" *ngIf="errorMsg">
+    <div class="card-title">
+      <h2>Error</h2>
+      <span class="pill">Info</span>
+    </div>
+    <div class="hint">{{ errorMsg }}</div>
+  </section>
+
+  <section class="card" *ngIf="!errorMsg && !session">
+    <div class="card-title">
+      <h2>Loading</h2>
+      <span class="pill">Please wait</span>
+    </div>
+    <div class="hint">Loading session from QR token...</div>
+  </section>
+
+  <div class="grid" *ngIf="session">
+    <section class="card">
+      <div class="card-title">
+        <h2>Feedback form</h2>
+        <span class="pill ok">Active</span>
+      </div>
+
+      <div class="block">
+        <div class="qtitle">Overall satisfaction</div>
+        <div class="stars">
+          <button class="star" type="button" (click)="satisfaction = 1" [class.active]="satisfaction === 1">1</button>
+          <button class="star" type="button" (click)="satisfaction = 2" [class.active]="satisfaction === 2">2</button>
+          <button class="star" type="button" (click)="satisfaction = 3" [class.active]="satisfaction === 3">3</button>
+          <button class="star" type="button" (click)="satisfaction = 4" [class.active]="satisfaction === 4">4</button>
+          <button class="star" type="button" (click)="satisfaction = 5" [class.active]="satisfaction === 5">5</button>
+        </div>
+        <div class="muted">Selected: {{ satisfaction }}/5</div>
+      </div>
+
+      <div class="block" *ngFor="let q of session.questions">
+        <div class="qtitle">{{ q.text }}</div>
+        <textarea rows="3" placeholder="Type your answer..." [(ngModel)]="answers[q.id]"></textarea>
+      </div>
+
+      <label class="anon">
+        <input type="checkbox" [(ngModel)]="anonymous" />
+        Submit anonymously
+      </label>
+
+      <button class="btn primary" type="button" (click)="submit()" [disabled]="submitted">
+        {{ submitted ? 'Submitted' : 'Submit feedback' }}
+      </button>
+
+      <div class="success" *ngIf="submitted">
+        Feedback submitted successfully. Thank you!
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-title">
+        <h2>Session info</h2>
+        <span class="pill">QR</span>
+      </div>
+
+      <div class="info">
+        <div class="row">
+          <div class="k">Survey ID</div>
+          <div class="v">{{ session.surveyId }}</div>
+        </div>
+        <div class="row">
+          <div class="k">Questions</div>
+          <div class="v">{{ session.questions.length }}</div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

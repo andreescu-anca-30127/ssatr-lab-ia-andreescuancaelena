@@ -1,0 +1,120 @@
+<div class="page">
+  <div class="head">
+    <div>
+      <h1>Dashboard</h1>
+      <p *ngIf="selectedSurveyId">
+        Live results for <code>{{ selectedSurveyId }}</code>. Press Refresh to update.
+      </p>
+      <p *ngIf="!selectedSurveyId">
+        Selectează un survey ca să vezi rezultatele.
+      </p>
+    </div>
+
+    <div class="controls">
+      <select
+        class="select"
+        [value]="selectedSurveyId"
+        (change)="onSelectSurvey($any($event.target).value)"
+      >
+        <option value="" disabled>Select a survey…</option>
+        <option *ngFor="let s of surveys" [value]="s.id">
+          {{ s.id }}
+        </option>
+      </select>
+
+      <button class="btn secondary" type="button" (click)="refresh()" [disabled]="!selectedSurveyId || loading">
+        {{ loading ? 'Loading…' : 'Refresh' }}
+      </button>
+    </div>
+  </div>
+
+  <section class="card" *ngIf="errorMsg">
+    <div class="card-title">
+      <h2>Error</h2>
+      <span class="pill">Info</span>
+    </div>
+    <div class="hint" style="color:#991b1b; font-weight:900;">
+      {{ errorMsg }}
+    </div>
+  </section>
+
+  <section class="card" *ngIf="loading && !aggregate">
+    <div class="card-title">
+      <h2>Loading</h2>
+      <span class="pill">Waiting</span>
+    </div>
+    <div class="hint">Fetching <code>/surveys/&lt;surveyId&gt;/responses</code></div>
+  </section>
+
+  <div *ngIf="aggregate">
+    <div class="kpis">
+      <div class="kpi">
+        <div class="k">Total responses</div>
+        <div class="v">{{ aggregate.totalResponses }}</div>
+        <div class="s">Answers count</div>
+      </div>
+
+      <div class="kpi">
+        <div class="k">Forms (ratings)</div>
+        <div class="v">{{ aggregate.totalForms }}</div>
+        <div class="s">Satisfaction submissions</div>
+      </div>
+
+      <div class="kpi">
+        <div class="k">Avg satisfaction</div>
+        <div class="v">{{ aggregate.averageSatisfaction }}</div>
+        <div class="s">From forms.satisfaction</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section class="card">
+        <div class="card-title">
+          <h2>Sentiment</h2>
+          <span class="pill live">Live</span>
+        </div>
+
+        <div class="sentiment">
+          <div class="bar positive">
+            <div class="label">Positive</div>
+            <div class="value">{{ aggregate.sentiment.positive }}</div>
+          </div>
+
+          <div class="bar neutral">
+            <div class="label">Neutral</div>
+            <div class="value">{{ aggregate.sentiment.neutral }}</div>
+          </div>
+
+          <div class="bar negative">
+            <div class="label">Negative</div>
+            <div class="value">{{ aggregate.sentiment.negative }}</div>
+          </div>
+        </div>
+
+        <div class="mini">
+          <div class="chip pos">Positive: {{ aggregate.sentiment.positive }}</div>
+          <div class="chip neu">Neutral: {{ aggregate.sentiment.neutral }}</div>
+          <div class="chip neg">Negative: {{ aggregate.sentiment.negative }}</div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-title">
+          <h2>Word cloud</h2>
+          <span class="pill">Text</span>
+        </div>
+
+        <div class="cloud">
+          <span class="w w1" *ngFor="let w of aggregate.topWords">
+            {{ w }}
+          </span>
+          <div class="hint" *ngIf="!aggregate.topWords.length">No text responses yet.</div>
+        </div>
+
+        <div class="hint">
+          Top words extracted from responses text.
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

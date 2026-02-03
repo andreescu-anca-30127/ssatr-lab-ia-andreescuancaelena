@@ -1,0 +1,141 @@
+<div class="page">
+  <div class="page-head">
+    <h1>Organizer</h1>
+    <p>Login → Create survey → Get QR + questions.</p>
+  </div>
+
+  <!-- STATUS -->
+  <section class="card">
+    <div class="card-title">
+      <h2>Status</h2>
+      <span class="pill" [class.ok]="loggedIn">
+        {{ loggedIn ? 'Logged in' : 'Not logged in' }}
+      </span>
+    </div>
+
+    <div *ngIf="successMsg" style="margin-top:10px; padding:10px; border-radius:10px; background:#f0fff4;">
+      {{ successMsg }}
+    </div>
+
+    <div *ngIf="loginError" style="margin-top:10px; padding:10px; border-radius:10px; background:#fff5f5;">
+     {{ loginError }}
+    </div>
+
+    <div *ngIf="createError" style="margin-top:10px; padding:10px; border-radius:10px; background:#fff5f5;">
+      {{ createError }}
+    </div>
+
+    <div *ngIf="qrError" style="margin-top:10px; padding:10px; border-radius:10px; background:#fff5f5;">
+      {{ qrError }}
+    </div>
+
+    <div style="margin-top:10px;">
+      <button class="btn secondary" type="button" (click)="logout()" *ngIf="loggedIn">
+        Logout
+      </button>
+    </div>
+  </section>
+
+  <div class="grid">
+    <!-- LOGIN -->
+    <section class="card">
+      <div class="card-title">
+        <h2>1) Login</h2>
+        <span class="pill">Required</span>
+      </div>
+
+      <div class="form">
+        <label>
+          Username
+          <input [(ngModel)]="username" placeholder="username..." />
+        </label>
+
+        <label>
+          Password
+          <input [(ngModel)]="password" type="password" placeholder="password..." />
+        </label>
+
+        <button class="btn primary" type="button" (click)="login()">Login</button>
+      </div>
+    </section>
+
+    <!-- CREATE SURVEY -->
+    <section class="card">
+      <div class="card-title">
+        <h2>2) Create Survey</h2>
+        <span class="pill">Setup</span>
+      </div>
+
+      <div class="form">
+        <div class="row2">
+          <label>
+            Feedback start
+            <input type="datetime-local" [(ngModel)]="feedbackStartLocal" />
+          </label>
+
+          <label>
+            Feedback end
+            <input type="datetime-local" [(ngModel)]="feedbackEndLocal" />
+          </label>
+        </div>
+
+        <label>
+          Questions (one per line)
+          <textarea rows="6" [(ngModel)]="questionsText"></textarea>
+        </label>
+
+        <button class="btn primary" type="button" (click)="createSurvey()" [disabled]="!loggedIn">
+          Create session + QR
+        </button>
+
+        <div class="hint" *ngIf="!loggedIn" style="margin-top:10px;">
+          Trebuie să fii logat ca să creezi survey.
+        </div>
+      </div>
+    </section>
+
+    <!-- QR + LINKS -->
+    <section class="card" *ngIf="surveyId">
+      <div class="card-title">
+        <h2>3) QR & Links</h2>
+        <span class="pill ok">Ready</span>
+      </div>
+
+      <div style="margin-top:10px;">
+        <div><b>Survey ID:</b> <code>{{ surveyId }}</code></div>
+      </div>
+
+      <div style="margin-top:12px;" *ngIf="qrUrl">
+        <img
+          [src]="qrUrl"
+          alt="QR"
+          style="width:220px; height:220px; border-radius:12px; border:1px solid #eee;"
+        />
+      </div>
+
+      <div *ngIf="participantUrl" style="margin-top:12px;">
+        <div class="muted">Participant URL:</div>
+        <code style="display:block; overflow:auto;">{{ participantUrl }}</code>
+      </div>
+
+      <div class="btnrow" style="margin-top:12px;">
+        <button class="btn secondary" type="button" (click)="openParticipant()" [disabled]="!participantUrl">
+          Open Participant
+        </button>
+
+        <button class="btn primary" type="button" (click)="openDashboard()" [disabled]="!surveyId">
+          Open Dashboard
+        </button>
+      </div>
+
+      <div style="margin-top:12px;" *ngIf="questions?.length">
+        <b>Questions loaded:</b> {{ questions.length }}
+        <ul style="margin-top:8px;">
+          <li *ngFor="let q of questions">
+            {{ q.text }}
+          </li>
+        </ul>
+      </div>
+    </section>
+  </div>
+</div>
